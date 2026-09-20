@@ -1,3 +1,3 @@
 import Foundation
 
-print("Hello, World!")
+print(Decimal(0.1) + Decimal(0.3))
