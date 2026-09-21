@@ -18,7 +18,7 @@ struct Transaction: Identifiable {
 	let date: String
 	let type: TransactionType
 	let ticker: String
-	let quantity: Int
+	let quantity: Decimal
 	let unitPrice: Decimal
 	let tradeFee: Decimal
 }
