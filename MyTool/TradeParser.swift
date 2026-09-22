@@ -8,57 +8,58 @@
 import Foundation
 
 
-
+enum ParsingError: Error {
+    case lackOfFieldsError(desc: String)
+    case transactionTypeError(desc: String)
+    case quantityTypeError(desc: String)
+    case unitPriceTypeError(desc: String)
+    case tradeFeeTypeError(desc: String)
+    case quantityTypeConversionError(desc: String)
+    case unitPriceTypeConversionError(desc: String)
+    case tradeFeeTypeConversionError(desc: String)
+}
 
 struct TradeParser {
 	
-	static var parserError: String = ""
-	
-	static func parse(line: String) -> Transaction? {
+	static func parse(line: String) -> Result<Transaction, ParsingError> {
 		let fields = line.split(separator: ",", omittingEmptySubsequences: false )
 			.map { String($0) }
 		guard fields.count == 6 else {
-			self.parserError = "필드 개수가 맞지 않음"
-			return nil
+            return Result.failure(.lackOfFieldsError(desc: "필드 개수가 맞지 않습니다"))
 		}
 		let date = fields[0]
 		let ticker = fields[2]
 		guard let type = TransactionType(rawValue: fields[1]) else {
-			self.parserError = "Not Transaction Type"
-			return nil
+            return .failure(.transactionTypeError(desc: "Transaction 타입이 아닙니다"))
 		}
 		guard let _ = Int(fields[3]) else {
-			self.parserError = "Not proper quantity type"
-			return nil
+            return .failure(.quantityTypeError(desc: "수량으로 적절하지 않은 타입입니다"))
 		}
 		guard let _ = Double(fields[4]) else {
-			self.parserError = "Not proper unit price type"
-			return nil
+            return .failure(.unitPriceTypeError(desc: "단가로 적절하지 않은 타입입니다"))
 		}
 		guard let _ = Double(fields[5]) else {
-			self.parserError = "Not proper trade fee type"
-			return nil
+            return .failure(.tradeFeeTypeError(desc: "중개수수료로 적절하지 않은 타입입니다"))
 		}
 		guard let qty = Decimal(string: fields[3]), qty >= 0 else {
-			self.parserError = "수량 타입 변환 실패"
-			return nil
+            return .failure(.quantityTypeConversionError(desc: "수량의 타입변환(Int -> Decimal)에 실패했습니다"))
 		}
 		guard let price = Decimal(string: fields[4]), price >= 0 else {
-			self.parserError = "단가 타입 변환 실패"
-			return nil
+            return .failure(.unitPriceTypeConversionError(desc: "단가의 타입변환(Double -> Decimal)에 실패했습니다"))
 		}
 		guard let fee = Decimal(string: fields[5]), fee >= 0 else {
-			self.parserError = "중개수수료 타입 변환 실패"
-			return nil
+            return .failure(.tradeFeeTypeConversionError(desc: "중개수수료의 타입변환(Double -> Decimal)에 실패했습니다"))
 		}
 		
-		return Transaction(
-			date: date,
-			type: type,
-			ticker: ticker,
-			quantity: qty,
-			unitPrice: price,
-			tradeFee: fee
-		)
+        return .success(
+            Transaction(
+                date: date,
+                type: type,
+                ticker: ticker,
+                quantity: qty,
+                unitPrice: price,
+                tradeFee: fee
+            )
+        )
 	}
 }
