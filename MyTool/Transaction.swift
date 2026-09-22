@@ -10,7 +10,7 @@ import Foundation
 enum TransactionType: String {
 	case sell = "SELL"
 	case buy = "BUY"
-	case Dividend = "DIV"
+	case dividend = "DIV"
 }
 
 struct Transaction: Identifiable {
