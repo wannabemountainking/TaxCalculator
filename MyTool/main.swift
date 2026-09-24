@@ -1,5 +1,6 @@
 import Foundation
 
+// 
 //
 //if let tradeURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first?.appending(components: "TaxCalculator", "trades.csv", directoryHint: .notDirectory) {
 //    
@@ -11,7 +12,6 @@ import Foundation
 //		let result = TradeParser.parse(line: tradeContents)
 //		switch result {
 //		case .success(let transaction):
-//			print(transaction)
 //			return transaction
 //		case .failure(let error):
 //			switch error {
@@ -36,4 +36,4 @@ import Foundation
 //}
 
 //groupWordsByLength()
-separateEvenAndOdd()
+//separateEvenAndOdd()

@@ -28,3 +28,19 @@ func separateEvenAndOdd() {
 	}
 	print(evenAndOddTuple)
 }
+
+func sumPerTicker() {
+    
+}
+
+func getTransactions() {
+    guard let tradeUrl = FileManager.default
+        .urls(for: .desktopDirectory, in: .userDomainMask)
+        .first?
+        .appending(components: "TaxCalculator", "trades.csv", directoryHint: .notDirectory) else { return }
+    
+    guard let tradeText = try? String(contentsOf: tradeUrl, encoding: .utf8) else { return }
+    let tradeTexts = tradeTexts.components(separatedBy: "\n").filter { !$0.isEmpty }
+    
+    
+}
