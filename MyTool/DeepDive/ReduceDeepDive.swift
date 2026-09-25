@@ -29,18 +29,52 @@ func separateEvenAndOdd() {
 	print(evenAndOddTuple)
 }
 
-func sumPerTicker() {
-    
+func transactionListForTicker(transactions: [Transaction]) -> [String: [Transaction]]{
+	let listForTicker = transactions.reduce(into: [String : [Transaction]]()) { dictAcc, transaction in
+		let key = transaction.ticker
+		dictAcc[key, default: []].append(transaction)
+	}
+	return listForTicker
 }
 
-func getTransactions() {
-    guard let tradeUrl = FileManager.default
-        .urls(for: .desktopDirectory, in: .userDomainMask)
-        .first?
-        .appending(components: "TaxCalculator", "trades.csv", directoryHint: .notDirectory) else { return }
-    
-    guard let tradeText = try? String(contentsOf: tradeUrl, encoding: .utf8) else { return }
-    let tradeTexts = tradeTexts.components(separatedBy: "\n").filter { !$0.isEmpty }
-    
-    
+func frequency() {
+	let text = "mississippi"
+	
+	let result = text.reduce(into: [Character: Int]()) { dictAcc, char in
+		let key = char
+		dictAcc[key, default: 0] += 1
+	}
+	
+	print(result)
+}
+
+func gatherTickers(transactions: [Transaction]) {
+	let result = transactions.reduce(into: Set<String>()) { setAcc, transaction in
+		let ticker = transaction.ticker
+		setAcc.insert(ticker)
+	}
+	print(result)
+}
+
+func searchTransaction(transactions: [Transaction]) -> [UUID: Transaction] {
+	
+	return transactions.reduce(into: [UUID: Transaction]()) { dictAcc, transaction in
+		let key = transaction.id
+		dictAcc[key] = transaction
+	}
+}
+
+func sumMaxMin() {
+	let prices = [180.0, 200.0, 175.5, 210.0, 190.25]
+	
+	let result = prices.reduce(into: (sum: 0.0, max: -Double.greatestFiniteMagnitude, min: Double.greatestFiniteMagnitude)) { result, number in
+		result.sum += number
+		if result.max < number {
+			result.max = number
+		}
+		if result.min > number {
+			result.min = number
+		}
+	}
+	print(result)
 }
