@@ -132,3 +132,32 @@ func topDividendPrint(result: [(ticker: String, total: Decimal)]) -> String {
 }
 
 // 실현손익 = 매도금액 − (매도수량 × 평균매입단가) − 매도수수료
+func realizedPnL(ticker: String, transactions: [Transaction]) -> Decimal? {
+	let sellTransactions = transactions.filter({ $0.ticker == ticker && $0.type == .sell })
+	guard let averageUnitValue = AvgCost.averageUnitPrice(ticker: ticker, transactions: transactions) else { return nil }
+	let result = sellTransactions.reduce(Decimal(0)) { prev, current in
+		let sell = current.quantity * current.unitPrice
+		let yourBuyingCost = current.quantity * averageUnitValue
+		return prev + sell - yourBuyingCost - current.tradeFee
+	}
+	return result
+}
+
+func realizedPnLPrint(tickers: [String], transactions: [Transaction]) -> String {
+	var result: String = ""
+	for index in 0..<tickers.count {
+		let lastOneNoSpace: String = (index == tickers.count - 1) ? "" : "\n"
+		if let pnL = realizedPnL(ticker: tickers[index], transactions: transactions) {
+			let pnLString = pnL.formatted(.number.precision(.fractionLength(2)))
+			result += "\(tickers[index]) 실현손익: $\(pnLString)\(lastOneNoSpace)"
+		} else {
+			result += "\(tickers[index]) 매수 기록 누락\(lastOneNoSpace)"
+		}
+	}
+	return result
+}
+
+
+func totalRealizedPnL(tickerPnL: [Decimal]()) - >Decimal {
+	
+}

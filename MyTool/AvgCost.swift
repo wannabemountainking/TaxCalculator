@@ -23,7 +23,6 @@ struct AvgCost {
 			
 			var rounded = Decimal()
 			NSDecimalRound(&rounded, &meanPrice, 2, .plain)
-			print(rounded)
 			return rounded
 		}
 	}
