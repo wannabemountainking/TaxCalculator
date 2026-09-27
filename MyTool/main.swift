@@ -43,7 +43,7 @@ if let tradeURL = FileManager.default.urls(for: .desktopDirectory, in: .userDoma
 //	print(AvgCost.averageUnitPrice(ticker: "AAPL", transactions: transactions))
 //	print(AvgCost.averageUnitPrice(ticker: "MSFT", transactions: transactions))
 //	print(realizedPnLPrint(tickers: ["AAPL", "MSFT"], transactions: transactions))
-	print(totalRealizedPnL(transactions: transactions, year: 2026))
+
 }
 
 //var test = Decimal(100) / Decimal(3)

@@ -158,6 +158,7 @@ func realizedPnLPrint(tickers: [String], transactions: [Transaction]) -> String 
 }
 
 
-func totalRealizedPnL(tickerPnL: [Decimal]()) - >Decimal {
-	
+
+func totalRealizedPnL(tickerPnL: [Decimal]) -> Decimal {
+	let
 }
