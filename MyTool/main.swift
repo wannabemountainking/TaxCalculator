@@ -34,12 +34,19 @@ if let tradeURL = FileManager.default.urls(for: .desktopDirectory, in: .userDoma
 		return nil
 		}
 	}
+//	print(dividendReport(transactions: transactions))
 	
-	print(AvgCost.averageUnitPrice(ticker: "AAPL", transactions: transactions))
-	print(AvgCost.averageUnitPrice(ticker: "MSFT", transactions: transactions))
+//	let monthly = monthlyDividendSummary(transactions: transactions)
+//	print(monthlyDividendPrint(result: monthly))
+//	let tupleArr = topDividendTickers(transactions: transactions, n: 2)
+//	print(topDividendPrint(result: tupleArr))
+//	print(AvgCost.averageUnitPrice(ticker: "AAPL", transactions: transactions))
+//	print(AvgCost.averageUnitPrice(ticker: "MSFT", transactions: transactions))
 }
 
-var test = Decimal(100) / Decimal(3)
-var testRounded = Decimal()
-NSDecimalRound(&testRounded, &test, 2, .plain)
-print(testRounded)
+//var test = Decimal(100) / Decimal(3)
+//var testRounded = Decimal()
+//NSDecimalRound(&testRounded, &test, 2, .plain)
+//print(testRounded)
+
+

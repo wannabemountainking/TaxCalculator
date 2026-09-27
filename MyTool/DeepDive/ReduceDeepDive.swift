@@ -78,3 +78,57 @@ func sumMaxMin() {
 	}
 	print(result)
 }
+
+func dividendReport(transactions: [Transaction]) -> (gross: Decimal, withholdingTax: Decimal, net: Decimal) {
+	let transactionsDiv = transactions.filter { $0.type == .dividend }
+	let preTaxAmount = transactionsDiv.reduce(Decimal(0)) { preTotal, current in
+		let currentSum = current.quantity * current.unitPrice
+		return currentSum + preTotal
+	}
+	
+	let transactionTax = TransactionTax(grossAmount: preTaxAmount)
+	let gross = preTaxAmount
+	let withholdingTax = transactionTax.withholdingTax
+	let net = transactionTax.netAmount
+	return (gross: gross, withholdingTax: withholdingTax, net: net)
+}
+func monthlyDividendSummary(transactions: [Transaction]) -> [String: Decimal] {
+	let divTransactions = transactions.filter{ $0.type == .dividend }
+	let result = divTransactions.reduce(into: [String: Decimal]()) { dictAcc, transaction in
+		let key = String(transaction.date.prefix(7))
+		let value = transaction.quantity * transaction.unitPrice
+		dictAcc[key, default: Decimal(0)] += value
+	}
+	return result
+}
+
+func monthlyDividendPrint(result: [String: Decimal]) -> [String: String] {
+	result.mapValues { dividend in
+		"$\(dividend.formatted(.number.precision(.fractionLength(2))))"
+	}
+}
+
+func topDividendTickers(transactions: [Transaction], n: Int) -> [(ticker: String, total: Decimal)] {
+	let divTransactions = transactions.filter{ $0.type == .dividend }
+	let resultDict = divTransactions.reduce(into: [String : Decimal]()) { dictAcc, transaction in
+		dictAcc[transaction.ticker, default: Decimal(0)] += transaction.quantity * transaction.unitPrice
+	}
+	let tupleArr = resultDict.map { (ticker: $0.key, total: $0.value) }
+	let aligned = tupleArr.sorted(by: { $0.total > $1.total })
+	let result = Array(aligned.prefix(n))
+	return result
+}
+
+func topDividendPrint(result: [(ticker: String, total: Decimal)]) -> String {
+	var presentableResult: String {
+		let arr = result.map { "\($0.ticker) $\($0.total.formatted(.number.precision(.fractionLength(2)))) " }
+		var transactionString: String = ""
+		for str in arr {
+			transactionString += str
+		}
+		return transactionString
+	}
+	return "상위 \(result.count)종목: \(presentableResult)"
+}
+
+// 실현손익 = 매도금액 − (매도수량 × 평균매입단가) − 매도수수료
