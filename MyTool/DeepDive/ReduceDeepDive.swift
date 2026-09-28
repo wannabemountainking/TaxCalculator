@@ -159,6 +159,25 @@ func realizedPnLPrint(tickers: [String], transactions: [Transaction]) -> String 
 
 
 
-func totalRealizedPnL(tickerPnL: [Decimal]) -> Decimal {
-	let
+func totalRealizedPnL(transactions: [Transaction]) -> (totalTaxableIncome: Decimal, totalTaxValueForWon: Decimal) {
+
+    var capitalGainTaxes = transactions.reduce(into: [CapitalGainTax(ticker: "", quantity: Decimal(string: "0")!)]) { taxArr, transaction in
+        let averageBuyingUnitPrice = realizedPnL(ticker: transaction.ticker, transactions: transactions)
+        let tax = CapitalGainTax(
+            ticker: transaction.ticker,
+            averagePurchaseUnitPrice: averageBuyingUnitPrice,
+            quantity: transaction.quantity
+        )
+        taxArr.append(tax)
+    }
+    capitalGainTaxes.removeFirst()
+    print(capitalGainTaxes)
+    let result = capitalGainTaxes.reduce(into: (totalTaxableIncome: Decimal(string: "0")!, totalTaxValueForWon: Decimal(string: "0")!)) { tupleAcc, capticalGainTax in
+        guard let taxableIncome = capticalGainTax.taxableIncome,
+              let taxValueForWon = capticalGainTax.taxValueForWon else { return }
+        tupleAcc.totalTaxableIncome += taxableIncome
+        tupleAcc.totalTaxValueForWon += taxValueForWon
+    }
+    
+    return result
 }
