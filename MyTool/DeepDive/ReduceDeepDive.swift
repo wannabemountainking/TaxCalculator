@@ -157,27 +157,34 @@ func realizedPnLPrint(tickers: [String], transactions: [Transaction]) -> String 
 	return result
 }
 
-
-
-func totalRealizedPnL(transactions: [Transaction]) -> (totalTaxableIncome: Decimal, totalTaxValueForWon: Decimal) {
-
-    var capitalGainTaxes = transactions.reduce(into: [CapitalGainTax(ticker: "", quantity: Decimal(string: "0")!)]) { taxArr, transaction in
-        let averageBuyingUnitPrice = realizedPnL(ticker: transaction.ticker, transactions: transactions)
-        let tax = CapitalGainTax(
-            ticker: transaction.ticker,
-            averagePurchaseUnitPrice: averageBuyingUnitPrice,
-            quantity: transaction.quantity
-        )
-        taxArr.append(tax)
-    }
-    capitalGainTaxes.removeFirst()
-    print(capitalGainTaxes)
-    let result = capitalGainTaxes.reduce(into: (totalTaxableIncome: Decimal(string: "0")!, totalTaxValueForWon: Decimal(string: "0")!)) { tupleAcc, capticalGainTax in
-        guard let taxableIncome = capticalGainTax.taxableIncome,
-              let taxValueForWon = capticalGainTax.taxValueForWon else { return }
-        tupleAcc.totalTaxableIncome += taxableIncome
-        tupleAcc.totalTaxValueForWon += taxValueForWon
-    }
-    
-    return result
+func wonPnLs(transactions: [Transaction]) -> [Decimal] {
+	let usdToWonExchangeRate: Decimal = Decimal(1_400)
+	// 1. ticker를 중복없이 모은다
+	// 2. ticker를 기준으로 순회하면서 각각의 realizedPnL을 구한다(배열)
+	// 3. nil이 나오면 제거하고 값이있으면 1400원을 곱한다
+	let tickers = transactions.reduce(into: Set<String>()) { setAcc, transaction in
+		setAcc.insert(transaction.ticker)
+	}
+	
+	let wonSum: [Decimal] = tickers.compactMap {
+		guard let pnl = realizedPnL(ticker: $0, transactions: transactions) else {return nil}
+		return pnl * usdToWonExchangeRate
+	}
+	return wonSum
 }
+
+func capitalGainTax(_ wonPnLs: [Decimal]) -> (taxableIncome: Decimal, tax: Decimal) {
+	
+	let basicDeduction: Decimal = Decimal(2_500_000)
+	let capitalGainTaxRate: Decimal = Decimal(string: "0.22")!
+	
+	// 1. 전체의 PnL 합하기 (reduce)
+	// 2. 과세표준(taxableIncome) 구하기 ( 금액의 -2_500_000을 하고 이게 0보다 큰것만 가져오는 코드)
+	// 3. 세금 구하기: taxableIncome * Decimal(string:"0.22")
+	let totalPnLs = wonPnLs.reduce(Decimal(0), +)
+	let taxableIncome = Swift.max(0, (totalPnLs - basicDeduction))
+	let tax = taxableIncome * capitalGainTaxRate
+	return (taxableIncome: taxableIncome, tax: tax)
+}
+
+
