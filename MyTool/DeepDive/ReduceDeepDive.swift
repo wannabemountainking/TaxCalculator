@@ -188,3 +188,22 @@ func capitalGainTax(_ wonPnLs: [Decimal]) -> (taxableIncome: Decimal, tax: Decim
 }
 
 
+// 연간 월세 수입 ÷ (매매가격 − 월세보증금) × 100: 임대수익률
+/*
+ 매입가: purchasePrice
+ 보증금: deposit
+ 실투자금: actualInvestment
+ 연 월세 수입: annualRentalIncome
+ 연 임대수익률: annualRentalYield
+ 공실: vacancy
+ 월 평균: monthlyAverage
+ */
+func rentalYield(monthlyRents: [String], purchasePrice: Decimal, deposit: Decimal) -> (annualRentalIncome: Decimal, annualRentalYield: Decimal, recentThreeMonthsAverage: Decimal) {
+	let actualInvestment = purchasePrice - deposit
+	let annualRentalIncomesArr = Array(monthlyRents.prefix(12))
+	let threeMonthsIncomesArr = Array(annualRentalIncomesArr.suffix(3)).map { Decimal(string: $0) ?? Decimal(0) }
+	let annualRentalIncomes = annualRentalIncomesArr.map { Decimal(string: $0) ?? Decimal(0) }.reduce(Decimal(0), +)
+	let annualRentalYield = (annualRentalIncomes / actualInvestment) * Decimal(100)
+	let recentThreeMonthsAverage = threeMonthsIncomesArr.reduce(0, +) / Decimal(3)
+	return (annualRentalIncome: annualRentalIncomes, annualRentalYield: annualRentalYield, recentThreeMonthsAverage: recentThreeMonthsAverage)
+}

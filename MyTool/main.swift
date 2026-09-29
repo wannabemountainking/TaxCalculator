@@ -43,11 +43,19 @@ if let tradeURL = FileManager.default.urls(for: .desktopDirectory, in: .userDoma
 //	print(AvgCost.averageUnitPrice(ticker: "AAPL", transactions: transactions))
 //	print(AvgCost.averageUnitPrice(ticker: "MSFT", transactions: transactions))
 //	print(realizedPnLPrint(tickers: ["AAPL", "MSFT"], transactions: transactions))
-	print(capitalGainTax(wonPnLs(transactions: transactions)))
+//	print(capitalGainTax(wonPnLs(transactions: transactions)))
 }
 
 //var test = Decimal(100) / Decimal(3)
 //var testRounded = Decimal()
 //NSDecimalRound(&testRounded, &test, 2, .plain)
 //print(testRounded)
-
+print(
+	rentalYield(
+		monthlyRents: [
+			"1000000", "1000000", "1000000", "1000000", "공실", "1000000", "1000000", "1000000", "1000000", "1000000", "공실", "1000000"
+		],
+		purchasePrice: Decimal(300_000_000),
+		deposit: Decimal(50_000_000)
+	)
+)
