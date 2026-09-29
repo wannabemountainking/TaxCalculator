@@ -207,3 +207,15 @@ func rentalYield(monthlyRents: [String], purchasePrice: Decimal, deposit: Decima
 	let recentThreeMonthsAverage = threeMonthsIncomesArr.reduce(0, +) / Decimal(3)
 	return (annualRentalIncome: annualRentalIncomes, annualRentalYield: annualRentalYield, recentThreeMonthsAverage: recentThreeMonthsAverage)
 }
+
+func printRentalYield(rentalYield: (annualRentalIncome: Decimal, annualRentalYield: Decimal, recentThreeMonthsAverage: Decimal)) {
+	let annualRentalYieldString: String = "\(rentalYield.annualRentalYield.formatted(.number.precision(.fractionLength(1))))%"
+	let recentThreeMonthsString: String = "약 \(rentalYield.recentThreeMonthsAverage.formatted(.number.precision(.fractionLength(0))))원"
+	print(
+"""
+연 임대수입: \(rentalYield.annualRentalIncome.formatted(.number))원
+연 임대수익률: \(annualRentalYieldString)
+최근 3개월 평균: \(recentThreeMonthsString)
+"""
+	)
+}

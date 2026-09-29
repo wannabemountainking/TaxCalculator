@@ -50,12 +50,11 @@ if let tradeURL = FileManager.default.urls(for: .desktopDirectory, in: .userDoma
 //var testRounded = Decimal()
 //NSDecimalRound(&testRounded, &test, 2, .plain)
 //print(testRounded)
-print(
-	rentalYield(
-		monthlyRents: [
-			"1000000", "1000000", "1000000", "1000000", "공실", "1000000", "1000000", "1000000", "1000000", "1000000", "공실", "1000000"
-		],
-		purchasePrice: Decimal(300_000_000),
-		deposit: Decimal(50_000_000)
-	)
+let result = rentalYield(
+	monthlyRents: [
+		"1000000", "1000000", "1000000", "1000000", "공실", "1000000", "1000000", "1000000", "1000000", "1000000", "공실", "1000000"
+	],
+	purchasePrice: Decimal(300_000_000),
+	deposit: Decimal(50_000_000)
 )
+printRentalYield(rentalYield: result)
