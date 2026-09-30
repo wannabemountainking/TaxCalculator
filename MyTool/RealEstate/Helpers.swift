@@ -37,9 +37,54 @@ struct AcquisitionValue {
 	}
 	
 	var showResult: String {
-		guard let result = self.result else {
-			return "\(self.method.title)(nil): 환산가액을 계산해 주세요"
-		}
-		return "\(self.method.title)(\(result.formatted())): \(result.formatted())원"
+        guard let result = self.result else {
+            return "\(self.method.title)(nil): 환산가액을 계산해 주세요"
+        }
+        let krwAmount = KRWAmount(value: result, unitLimit: Decimal(1_000_000))
+        return "\(self.method.title)(\(krwAmount.koreanUnitString())): \(result.formatted())원"
 	}
+}
+
+struct KRWAmount {
+    let value: Decimal
+    let unitLimit: Decimal
+    
+    func koreanUnitString() -> String {
+        var quotient = value / unitLimit
+        var roundPlain = Decimal()
+        NSDecimalRound(&roundPlain, &quotient, 0, .plain)
+        let stringValue = "\(roundPlain)"
+        let front = stringValue.count > 2 ? [String(stringValue.dropLast(2))] : []
+        let lastTwo = stringValue.suffix(2).map { String($0) }
+        let stringValues: [String] = front + lastTwo
+        switch stringValues.count {
+        case 1:
+            if stringValues[0] == "0" {
+                return "\(value.formatted())원"
+            } else {
+                return "\(stringValues[0])백만원"
+            }
+        case 2:
+            if stringValues[1] == "0" {
+                return "\(stringValues[0])천만원"
+            } else {
+                return "\(stringValues[0])천\(stringValues[1])백만원"
+            }
+        case 3:
+            if stringValues[2] == "0" {
+                if stringValues[1] == "0" {
+                    return "\(stringValues[0])억원"
+                } else {
+                    return "\(stringValues[0])억\(stringValues[1])천만원"
+                }
+            } else {
+                if stringValues[1] == "0" {
+                    return "\(stringValues[0])억\(stringValues[2])백만원"
+                } else {
+                    return "\(stringValues[0])억\(stringValues[1])천\(stringValues[2])만원"
+                }
+            }
+        default: return "잘못된 숫자를 넣었습니다."
+        }
+    }
 }
