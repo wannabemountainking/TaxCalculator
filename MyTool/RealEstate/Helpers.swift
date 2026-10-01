@@ -88,3 +88,17 @@ struct KRWAmount {
         }
     }
 }
+
+// 필요경비
+enum RecognizedExpense {
+	static let acquisitionTax = "취득세"
+	static let brokerageFee = "중개수수료"
+	static let legalFee = "법무사비"
+}
+let expenseItems: [(name: String, amount: Decimal)] = [
+	(name: "취득세", amount: Decimal(3_000_000)),
+	(name: "중개수수료", amount: Decimal(1_200_000)),
+	(name: "법무사비", amount: Decimal(500_000)),
+	(name: "도배장판", amount: Decimal(800_000)),
+	(name: "재산세", amount: Decimal(600_000))
+]

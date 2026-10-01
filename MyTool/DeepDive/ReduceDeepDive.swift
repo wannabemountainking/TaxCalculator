@@ -219,3 +219,76 @@ func printRentalYield(rentalYield: (annualRentalIncome: Decimal, annualRentalYie
 """
 	)
 }
+
+// 양도차익
+/*
+ 양도가액	Transfer price / Sale price	transferPrice
+ 취득가액	Acquisition value	acquisitionValue (이미 struct 이름으로 씀 — 변수로 쓸 땐 acquisitionValue.result)
+ 필요경비	Necessary (deductible) expenses	necessaryExpenses
+ 인정 항목	Recognized/Deductible items	recognizedExpenses (이미 enum 이름공간으로 지으셨죠)
+ 양도차익	Capital gain (on transfer)	capitalGain (4-B에서 CapitalGainTax를 이미 쓰셨으니, 헷갈리지 않게 이번엔 transferGain처럼 구분할 수도 있습니다)
+ 항목명	Item name	name
+ 금액	Amount	amount
+ */
+func transferGain(
+	transferPrice: Decimal,
+	acquisitionValue: Decimal?,
+	necessaryExpenses: [(name: String, amount: Decimal)],
+	recognizedExpenses: [String]
+) -> (transferGain: Decimal?, recognizedNecessaryExpenses: Decimal) {
+	let recognizedNecessaryExpenses = necessaryExpenses
+		.filter { necessary in recognizedExpenses.contains(where: { $0 == necessary.name }) }
+		.reduce(Decimal(0)) { $0 + $1.amount }
+	guard let acquisitionValue else { return (transferGain: nil, recognizedNecessaryExpenses: recognizedNecessaryExpenses) }
+	let result = transferPrice - acquisitionValue - recognizedNecessaryExpenses
+	return (transferGain: result, recognizedNecessaryExpenses: recognizedNecessaryExpenses)
+}
+
+func transferGainKUS(
+	transferPrice: Decimal,
+	acquisitionValue: Decimal?,
+	necessaryExpenses: [(name: String, amount: Decimal)],
+	recognizedExpenses: [String]
+) -> String? {
+	
+	let transferGainResult = transferGain(
+		transferPrice: transferPrice,
+		acquisitionValue: acquisitionValue,
+		necessaryExpenses: necessaryExpenses,
+		recognizedExpenses: recognizedExpenses
+	)
+	// 양도가액 스트링
+	let unitLimit = Decimal(1_000_000)
+	let transferPriceKUS = KRWAmount(value: transferPrice, unitLimit: unitLimit).koreanUnitString()
+	
+	// 취득가액 스트링
+	guard let transferGain = transferGainResult.transferGain,
+		  let acquisitionValue else {return nil}
+	let acquisitionnValueKUS = KRWAmount(
+		value: acquisitionValue,
+		unitLimit: unitLimit
+	).koreanUnitString()
+	
+	// 인정 필요경비 스트링
+	let recognizedNecessareExpensesKUS = KRWAmount(
+		value: transferGainResult.recognizedNecessaryExpenses,
+		unitLimit: unitLimit
+	).koreanUnitString()
+	
+	// 양도차익 스트링
+	let transferGainKUS = KRWAmount(
+		value: transferGain,
+		unitLimit: unitLimit
+	).koreanUnitString()
+
+	return
+		"""
+		양도가액: \(transferPrice.formatted())원 (약 \(transferPriceKUS))
+		취득가액: \(acquisitionValue.formatted())원 (약 \(acquisitionnValueKUS))
+		인정 필요경비: \(transferGainResult.recognizedNecessaryExpenses.formatted())원 (약 \(recognizedNecessareExpensesKUS))
+		양도차익: \(transferGain.formatted())원 (약 \(transferGainKUS))
+		"""
+}
+
+func
+

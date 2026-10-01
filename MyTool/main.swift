@@ -59,18 +59,33 @@ if let tradeURL = FileManager.default.urls(for: .desktopDirectory, in: .userDoma
 //)
 //printRentalYield(rentalYield: result)
 
-let purchased = AcquisitionValue(method: .purchased(price: Decimal(300_000_000)))
-let inherited = AcquisitionValue(method: .inherited(fairValue: Decimal(500_000_000)))
-let selfBuilt = AcquisitionValue(method: .selfBuilt(actualCost: nil))
+//let purchased = AcquisitionValue(method: .purchased(price: Decimal(300_000_000)))
+//let inherited = AcquisitionValue(method: .inherited(fairValue: Decimal(500_000_000)))
+//let selfBuilt = AcquisitionValue(method: .selfBuilt(actualCost: nil))
+//
+//print(purchased.showResult)
+//print(inherited.showResult)
+//print(selfBuilt.showResult)
+//print(KRWAmount(value: Decimal(300_000_000), unitLimit: Decimal(1_000_000)).koreanUnitString())
+//print(KRWAmount(value: Decimal(320_000_000), unitLimit: Decimal(1_000_000)).koreanUnitString())
+//print(KRWAmount(value: Decimal(50_000_000), unitLimit: Decimal(1_000_000)).koreanUnitString())
+//print(KRWAmount(value: Decimal(329_996_000), unitLimit: Decimal(1_000_000)).koreanUnitString())
+//print(KRWAmount(value: Decimal(12_345_678), unitLimit: Decimal(1_000_000)).koreanUnitString())
+//print(KRWAmount(value: Decimal(3_000_000), unitLimit: Decimal(1_000_000)).koreanUnitString())
+//print(KRWAmount(value: Decimal(1000), unitLimit: Decimal(1_000_000)).koreanUnitString())
+//print(KRWAmount(value: Decimal(0), unitLimit: Decimal(1_000_000)).koreanUnitString())
 
-print(purchased.showResult)
-print(inherited.showResult)
-print(selfBuilt.showResult)
-print(KRWAmount(value: Decimal(300_000_000), unitLimit: Decimal(1_000_000)).koreanUnitString())
-print(KRWAmount(value: Decimal(320_000_000), unitLimit: Decimal(1_000_000)).koreanUnitString())
-print(KRWAmount(value: Decimal(50_000_000), unitLimit: Decimal(1_000_000)).koreanUnitString())
-print(KRWAmount(value: Decimal(329_996_000), unitLimit: Decimal(1_000_000)).koreanUnitString())
-print(KRWAmount(value: Decimal(12_345_678), unitLimit: Decimal(1_000_000)).koreanUnitString())
-print(KRWAmount(value: Decimal(3_000_000), unitLimit: Decimal(1_000_000)).koreanUnitString())
-print(KRWAmount(value: Decimal(1000), unitLimit: Decimal(1_000_000)).koreanUnitString())
-print(KRWAmount(value: Decimal(0), unitLimit: Decimal(1_000_000)).koreanUnitString())
+//양도차익
+
+if let acqValue = AcquisitionValue(method: .purchased(price: Decimal(300_000_000))).result,
+   let result = transferGainKUS(
+	transferPrice: Decimal(350_000_000),
+	acquisitionValue: acqValue,
+	necessaryExpenses: expenseItems,
+	recognizedExpenses: [RecognizedExpense.acquisitionTax, RecognizedExpense.brokerageFee, RecognizedExpense.legalFee]
+   ) {
+	print(result)
+} else {
+	print("취득가액 에러")
+}
+	
