@@ -290,5 +290,12 @@ func transferGainKUS(
 		"""
 }
 
-func
+func comprehensiveTaxationCheck(financialIncome: Decimal, limit: Decimal) -> (isOverThreshold:Bool, excessAmount: Decimal) {
+	let difference = financialIncome - limit
+	let isOverThreshold = difference > 0
+	let excessAmount = max(Decimal(0), difference)
+	return (isOverThreshold: isOverThreshold, excessAmount: excessAmount)
+}
 
+func dependentQualificationCheck(totalIncome: Decimal, propertyTaxBase: Decimal) {
+}

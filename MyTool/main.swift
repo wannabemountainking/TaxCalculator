@@ -77,15 +77,17 @@ if let tradeURL = FileManager.default.urls(for: .desktopDirectory, in: .userDoma
 
 //양도차익
 
-if let acqValue = AcquisitionValue(method: .purchased(price: Decimal(300_000_000))).result,
-   let result = transferGainKUS(
-	transferPrice: Decimal(350_000_000),
-	acquisitionValue: acqValue,
-	necessaryExpenses: expenseItems,
-	recognizedExpenses: [RecognizedExpense.acquisitionTax, RecognizedExpense.brokerageFee, RecognizedExpense.legalFee]
-   ) {
-	print(result)
-} else {
-	print("취득가액 에러")
+//if let acqValue = AcquisitionValue(method: .purchased(price: Decimal(300_000_000))).result,
+//   let result = transferGainKUS(
+//	transferPrice: Decimal(350_000_000),
+//	acquisitionValue: acqValue,
+//	necessaryExpenses: expenseItems,
+//	recognizedExpenses: [RecognizedExpense.acquisitionTax, RecognizedExpense.brokerageFee, RecognizedExpense.legalFee]
+//   ) {
+//	print(result)
+//} else {
+//	print("취득가액 에러")
+//}
+for amount in [Decimal(23_000_000), Decimal(15_000_000), Decimal(20_000_000)] {
+	print(comprehensiveTaxationCheck(financialIncome: amount, limit: 20_000_000))
 }
-	
