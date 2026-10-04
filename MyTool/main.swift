@@ -88,6 +88,14 @@ if let tradeURL = FileManager.default.urls(for: .desktopDirectory, in: .userDoma
 //} else {
 //	print("취득가액 에러")
 //}
-for amount in [Decimal(23_000_000), Decimal(15_000_000), Decimal(20_000_000)] {
-	print(comprehensiveTaxationCheck(financialIncome: amount, limit: 20_000_000))
+//for amount in [Decimal(23_000_000), Decimal(15_000_000), Decimal(20_000_000)] {
+//	print(comprehensiveTaxationCheck(financialIncome: amount, limit: 20_000_000))
+//}
+for (totalIncome, propertyTaxBase) in totalIncomeAndProperties {
+	print(
+		dependentQualificationCheck(
+			totalIncome: totalIncome,
+			propertyTaxBase: propertyTaxBase
+		).rawValue
+	)
 }

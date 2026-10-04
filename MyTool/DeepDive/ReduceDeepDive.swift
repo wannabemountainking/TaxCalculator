@@ -297,5 +297,21 @@ func comprehensiveTaxationCheck(financialIncome: Decimal, limit: Decimal) -> (is
 	return (isOverThreshold: isOverThreshold, excessAmount: excessAmount)
 }
 
-func dependentQualificationCheck(totalIncome: Decimal, propertyTaxBase: Decimal) {
+func dependentQualificationCheck(totalIncome: Decimal, propertyTaxBase: Decimal) -> DependentQualification {
+	if propertyTaxBase > HealthInsuranceConstants.propertyUpperBound {
+		return .disQualified
+	} else if propertyTaxBase > HealthInsuranceConstants.propertyLowerBound {
+		if totalIncome > HealthInsuranceConstants.strictIncomeThreshold {
+			return .disQualified
+		} else {
+			return .Qualified
+		}
+	} else {
+		if totalIncome > HealthInsuranceConstants.standardIncomeThreshold {
+			return .disQualified
+		} else {
+			return .Qualified
+		}
+	}
 }
+

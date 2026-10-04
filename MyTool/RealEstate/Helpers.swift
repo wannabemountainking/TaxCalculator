@@ -102,3 +102,31 @@ let expenseItems: [(name: String, amount: Decimal)] = [
 	(name: "도배장판", amount: Decimal(800_000)),
 	(name: "재산세", amount: Decimal(600_000))
 ]
+
+// 건강보험료 기준
+enum HealthInsuranceConstants {
+	// 재산 9억 초과일때 (무조건 과세대상), 9억~5.4억 일때 소득구간 확인
+	static let propertyUpperBound: Decimal = Decimal(900_000_000)
+	static let propertyLowerBound: Decimal = Decimal(540_000_000)
+	// 재산 5.4억 이하일때 소득 기준 (소득이 이게 넘으면 과세)
+	static let standardIncomeThreshold: Decimal = Decimal(20_000_000)
+	// 재산 5.4억 - 9억 구간일때 소득 기준 (소득이 이게 넘으면 과세)
+	static let strictIncomeThreshold: Decimal = Decimal(10_000_000)
+}
+
+// 건강보험 피부양자 자격
+enum DependentQualification: String {
+	case Qualified = "건강보험 피부양자 자격 유지"
+	case disQualified = "건강보험 피부양자 자격 박탈"
+}
+
+let totalIncomeAndProperties: [(totalIncome: Decimal, propertyTaxBase: Decimal)] = [
+	(totalIncome: Decimal(15_000_000), propertyTaxBase: Decimal(300_000_000)),
+	(totalIncome: Decimal(25_000_000), propertyTaxBase: Decimal(300_000_000)),
+	(totalIncome: Decimal(8_000_000), propertyTaxBase: Decimal(600_000_000)),
+	(totalIncome: Decimal(15_000_000), propertyTaxBase: Decimal(600_000_000)),
+	(totalIncome: Decimal(5_000_000), propertyTaxBase: Decimal(1_000_000_000)),
+	(totalIncome: Decimal(5_000_000), propertyTaxBase: Decimal(900_000_000)),
+	(totalIncome: Decimal(15_000_000), propertyTaxBase: Decimal(900_000_000))
+]
+
