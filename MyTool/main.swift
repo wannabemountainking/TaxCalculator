@@ -91,11 +91,16 @@ if let tradeURL = FileManager.default.urls(for: .desktopDirectory, in: .userDoma
 //for amount in [Decimal(23_000_000), Decimal(15_000_000), Decimal(20_000_000)] {
 //	print(comprehensiveTaxationCheck(financialIncome: amount, limit: 20_000_000))
 //}
-for (totalIncome, propertyTaxBase) in totalIncomeAndProperties {
-	print(
-		dependentQualificationCheck(
-			totalIncome: totalIncome,
-			propertyTaxBase: propertyTaxBase
-		).rawValue
-	)
-}
+//for (totalIncome, propertyTaxBase) in totalIncomeAndProperties {
+//	print(
+//		dependentQualificationCheck(
+//			totalIncome: totalIncome,
+//			propertyTaxBase: propertyTaxBase
+//		).rawValue
+//	)
+//}
+
+let premiums = employeeIncomePremium(employmentExcessIncome: Decimal(44_000_000))
+print("소득월액보험료: \(premiums.monthlyIncomePremium.formatted())원")
+print("장기요양보험료: \(premiums.monthlyLongTermCarePremium.formatted())원")
+print("연간추가부담: \(premiums.annualAdditionalBurden.formatted())원")

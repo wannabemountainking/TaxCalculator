@@ -130,3 +130,17 @@ let totalIncomeAndProperties: [(totalIncome: Decimal, propertyTaxBase: Decimal)]
 	(totalIncome: Decimal(15_000_000), propertyTaxBase: Decimal(900_000_000))
 ]
 
+// 건강보험 요율, 장기요양보험 요율
+enum HealthInsurancePremium {
+    static let monthlyIncomePremiumRate: Decimal = Decimal(string: "0.0719")!
+    static let monthlyLongTermCarePremiumRate: Decimal = Decimal(string: "0.009448")!
+}
+
+extension Decimal {
+    func truncateToTen(to scale: Int) -> Decimal {
+        var number = self
+        var roundDownByTen = Decimal()
+        NSDecimalRound(&roundDownByTen, &number, scale, .down)
+        return roundDownByTen
+    }
+}

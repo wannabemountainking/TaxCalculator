@@ -315,3 +315,37 @@ func dependentQualificationCheck(totalIncome: Decimal, propertyTaxBase: Decimal)
 	}
 }
 
+// 월 건강보험료, 장기요양보험료
+/*
+ 1. 초과분 = max(0, 보수외소득합계 - 2,000만원)
+ 2. 소득월액 = 초과분 ÷ 12
+ 3. 소득월액보험료(월) = 소득월액 × 7.19%
+ 4. 장기요양보험료(월) = 소득월액보험료 × (0.9448% ÷ 7.19%)
+ 5. 연간추가부담 = (소득월액보험료 + 장기요양보험료) × 12
+ 초과분 excessAmount
+ 소득월액 monthlyIncomeAmount
+ 소득월액보험료 monthlyIncomePremium
+ 장기요양보험료 monthlyLongTermCarePremium
+ 연간추가부담 annualAdditionalBurden
+ */
+
+func employeeIncomePremium(employmentExcessIncome: Decimal) -> (
+    monthlyIncomePremium: Decimal,
+    monthlyLongTermCarePremium: Decimal,
+    annualAdditionalBurden: Decimal
+) {
+    let excessAmount = max(0, employmentExcessIncome - Decimal(20_000_000))
+    let monthlyIncomeAmount = excessAmount / Decimal(12)
+    
+    let monthlyIncomePremium = (monthlyIncomeAmount * HealthInsurancePremium.monthlyIncomePremiumRate).truncateToTen(to: -1)
+    let monthlyLongTermCarePremium = (monthlyIncomePremium * (HealthInsurancePremium.monthlyLongTermCarePremiumRate / HealthInsurancePremium.monthlyIncomePremiumRate)).truncateToTen(to: -1)
+    let annualAdditionalBurden = (monthlyIncomePremium + monthlyLongTermCarePremium) * Decimal(12)
+    
+    return (
+        monthlyIncomePremium: monthlyIncomePremium,
+        monthlyLongTermCarePremium: monthlyLongTermCarePremium,
+        annualAdditionalBurden: annualAdditionalBurden
+    )
+}
+
+
