@@ -144,3 +144,9 @@ extension Decimal {
         return roundDownByTen
     }
 }
+
+// 연간 종합소득 리포트
+enum SubscriberType {
+	case employee(employmentExcessIncome: Decimal)
+	case dependent(totalIncome: Decimal, propertyTaxBase: Decimal)
+}
