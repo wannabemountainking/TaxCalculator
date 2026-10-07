@@ -348,4 +348,21 @@ func employeeIncomePremium(employmentExcessIncome: Decimal) -> (
     )
 }
 
-
+func healthInsurancePremium(subscriber: SubscriberType) -> HealthInsuranceResult {
+    switch subscriber {
+    case .employee(let employmentExcessIncome):
+        let premium = employeeIncomePremium(employmentExcessIncome: employmentExcessIncome)
+        return HealthInsuranceResult.employee(
+            monthlyIncomePremium: premium.monthlyIncomePremium,
+            monthlyLongTermCarePremium: premium.monthlyLongTermCarePremium,
+            annualAdditionalBurden: premium.annualAdditionalBurden
+        )
+        
+    case .dependent(let totalIncome, let propertyTaxBase):
+        let qualification = dependentQualificationCheck(
+            totalIncome: totalIncome,
+            propertyTaxBase: propertyTaxBase
+        )
+        return HealthInsuranceResult.dependent(qualification: qualification)
+    }
+}

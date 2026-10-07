@@ -150,3 +150,8 @@ enum SubscriberType {
 	case employee(employmentExcessIncome: Decimal)
 	case dependent(totalIncome: Decimal, propertyTaxBase: Decimal)
 }
+
+enum HealthInsuranceResult {
+    case employee( monthlyIncomePremium: Decimal, monthlyLongTermCarePremium: Decimal, annualAdditionalBurden: Decimal)
+    case dependent(qualification: DependentQualification)
+}
