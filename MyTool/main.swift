@@ -105,5 +105,10 @@ if let tradeURL = FileManager.default.urls(for: .desktopDirectory, in: .userDoma
 //print("장기요양보험료: \(premiums.monthlyLongTermCarePremium.formatted())원")
 //print("연간추가부담: \(premiums.annualAdditionalBurden.formatted())원")
 
-print(healthInsurancePremium(subscriber: .employee(employmentExcessIncome: Decimal(23_000_000))))
-print(healthInsurancePremium(subscriber: .dependent(totalIncome: Decimal(15_000_000), propertyTaxBase: Decimal(300_000_000))))
+//print(healthInsurancePremium(subscriber: .employee(employmentExcessIncome: Decimal(44_000_000))))
+//print(healthInsurancePremium(subscriber: .dependent(totalIncome: Decimal(15_000_000), propertyTaxBase: Decimal(300_000_000))))
+//print(healthInsurancePremium(subscriber: .dependent(totalIncome: 25_000_000, propertyTaxBase: 300_000_000)))
+
+print(healthCarePremiumReport(healthCareResult: healthInsurancePremium(subscriber: .employee(employmentExcessIncome: Decimal(44_000_000)))))
+print(healthCarePremiumReport(healthCareResult: healthInsurancePremium(subscriber: .dependent(totalIncome: Decimal(15_000_000), propertyTaxBase: Decimal(300_000_000)))))
+print(healthCarePremiumReport(healthCareResult: healthInsurancePremium(subscriber: .dependent(totalIncome: Decimal(25_000_000), propertyTaxBase: Decimal(300_000_000)))))

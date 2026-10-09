@@ -366,3 +366,17 @@ func healthInsurancePremium(subscriber: SubscriberType) -> HealthInsuranceResult
         return HealthInsuranceResult.dependent(qualification: qualification)
     }
 }
+
+func healthCarePremiumReport(healthCareResult: HealthInsuranceResult) -> String {
+	switch healthCareResult {
+	case .employee(let monthlyIncomePremium, let monthlyLongTermCarePremium, let annualAdditionalBurden):
+		return
+"""
+월 건강보험료: \(monthlyIncomePremium.formatted())원
+월 장기요양보험료: \(monthlyLongTermCarePremium.formatted())원
+연간 추가 부담: \(annualAdditionalBurden.formatted())원
+"""
+	case .dependent(let qualification):
+		return qualification.rawValue
+	}
+}
