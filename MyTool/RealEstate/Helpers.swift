@@ -148,10 +148,16 @@ extension Decimal {
 // 연간 종합소득 리포트
 enum SubscriberType {
 	case employee(employmentExcessIncome: Decimal)
-	case dependent(totalIncome: Decimal, propertyTaxBase: Decimal)
+	case dependentCandidate(totalIncome: Decimal, propertyTaxBase: Decimal)
+}
+
+enum DependentOutcome {
+	case stillDependent(totalIncome: Decimal, propertyTaxBase: Decimal)
+	case becomeRegional(totalIncome: Decimal, propertyTaxBase: Decimal)
 }
 
 enum HealthInsuranceResult {
     case employee( monthlyIncomePremium: Decimal, monthlyLongTermCarePremium: Decimal, annualAdditionalBurden: Decimal)
-    case dependent(qualification: DependentQualification)
+	case dependentCandidate(outcome: DependentOutcome)
 }
+

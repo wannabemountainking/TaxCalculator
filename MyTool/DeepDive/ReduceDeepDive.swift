@@ -358,12 +358,9 @@ func healthInsurancePremium(subscriber: SubscriberType) -> HealthInsuranceResult
             annualAdditionalBurden: premium.annualAdditionalBurden
         )
         
-    case .dependent(let totalIncome, let propertyTaxBase):
-        let qualification = dependentQualificationCheck(
-            totalIncome: totalIncome,
-            propertyTaxBase: propertyTaxBase
-        )
-        return HealthInsuranceResult.dependent(qualification: qualification)
+    case .dependentCandidate(let totalIncome, let propertyTaxBase):
+		let outcome = dependentRegionalCheck(totalIncome: totalIncome, propertyTaxBase: propertyTaxBase)
+		return HealthInsuranceResult.dependentCandidate(outcome: outcome)
     }
 }
 
@@ -376,7 +373,26 @@ func healthCarePremiumReport(healthCareResult: HealthInsuranceResult) -> String 
 월 장기요양보험료: \(monthlyLongTermCarePremium.formatted())원
 연간 추가 부담: \(annualAdditionalBurden.formatted())원
 """
-	case .dependent(let qualification):
-		return qualification.rawValue
+	case .dependentCandidate(let dependentOutcome):
+		switch dependentOutcome {
+		case .stillDependent(let totalIncome, let propertyTaxBase):
+			return "건강보험 피부양자 자격 유지"
+		case .becomeRegional(let totalIncome, let propertyTaxBase):
+			return
+"""
+건강보험 피부양자 자격 박탈 -> 지역가입자 전환
+(지역가입자 보험료 계산은 아직 지원하지 않습니다)
+"""
+		}
+	}
+}
+
+func dependentRegionalCheck(totalIncome: Decimal, propertyTaxBase: Decimal) -> DependentOutcome {
+	let checkResult = dependentQualificationCheck(totalIncome: totalIncome, propertyTaxBase: propertyTaxBase)
+	switch checkResult {
+	case .Qualified:
+		return DependentOutcome.stillDependent(totalIncome: totalIncome, propertyTaxBase: propertyTaxBase)
+	case .disQualified:
+		return DependentOutcome.becomeRegional(totalIncome: totalIncome, propertyTaxBase: propertyTaxBase)
 	}
 }

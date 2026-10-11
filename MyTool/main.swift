@@ -110,5 +110,5 @@ if let tradeURL = FileManager.default.urls(for: .desktopDirectory, in: .userDoma
 //print(healthInsurancePremium(subscriber: .dependent(totalIncome: 25_000_000, propertyTaxBase: 300_000_000)))
 
 print(healthCarePremiumReport(healthCareResult: healthInsurancePremium(subscriber: .employee(employmentExcessIncome: Decimal(44_000_000)))))
-print(healthCarePremiumReport(healthCareResult: healthInsurancePremium(subscriber: .dependent(totalIncome: Decimal(15_000_000), propertyTaxBase: Decimal(300_000_000)))))
-print(healthCarePremiumReport(healthCareResult: healthInsurancePremium(subscriber: .dependent(totalIncome: Decimal(25_000_000), propertyTaxBase: Decimal(300_000_000)))))
+print(healthCarePremiumReport(healthCareResult: healthInsurancePremium(subscriber: .dependentCandidate(totalIncome: Decimal(15_000_000), propertyTaxBase: Decimal(300_000_000)))))
+print(healthCarePremiumReport(healthCareResult: healthInsurancePremium(subscriber: .dependentCandidate(totalIncome: Decimal(25_000_000), propertyTaxBase: Decimal(300_000_000)))))
